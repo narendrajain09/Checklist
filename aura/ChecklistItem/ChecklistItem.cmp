@@ -1,0 +1,53 @@
+<aura:component controller = "ChecklistController">
+    <aura:attribute name="ChecklistItem" type="Object" default="{}"/>
+    <aura:attribute name="Action" type="Boolean"/>
+    <aura:attribute name="ConfirmMessage" type="Boolean"/>
+    <aura:attribute name="ShowSpinner" type="Boolean"/>
+    
+    
+    <aura:registerEvent name="RefreshEvent" type="c:ChecklistRefreshEvent"/>
+
+    <tr>
+        <td scope="row" data-label="Description">
+            <div class="slds-truncate" title="{!v.ChecklistItem.Description__c}">
+                <lightning:icon iconName="{!v.ChecklistItem.Completed__c ? 'utility:check' : 'utility:stage'}" size="x-small"/>
+                &nbsp;{!v.ChecklistItem.Description__c}
+            </div>
+        </td>
+        <td data-label="Completed">
+            <ui:outputCheckbox value="{!v.ChecklistItem.Completed__c}"/>
+        </td>
+        <td>
+            <lightning:button iconName="utility:check" disabled="{!v.ChecklistItem.Completed__c}" variant="{!v.ChecklistItem.Completed__c ? 'neutral' : 'success'}" label="Mark Complete" title="Mark Complete" onclick="{! c.markComplete }"/>
+            <aura:if isTrue="{!v.ChecklistItem.Completed__c}" >
+                <lightning:button iconName="utility:undo" variant="destructive" label="Revert" title="Revert" onclick="{! c.revert }"/>
+            </aura:if>
+            <lightning:buttonIcon iconName="utility:delete" variant="border-inverse" class="delete" title="Delete" onclick="{! c.delete }"/>
+        </td>
+    </tr>
+    
+    <div aura:id="confirm" class="slds-hide">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.cancel}">
+                        <lightning:icon iconName="utility:close" alternativeText="Close" />
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        <lightning:icon iconName="utility:warning" size="small" alternativeText="Close" />
+                        Confirmation!
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <ui:outputText class="slds-align--absolute-center" value="{!v.ConfirmMessage}"></ui:outputText>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.confirm}">Confirm</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    
+</aura:component>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Checklist_Delete_Success_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Delete Success Message</shortDescription>
+        <value>Checklist deleted Successfully</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Item_Confirm_Alert_Message_for_Complete_Status</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Item Confirm Alert Message for Complete Status</shortDescription>
+        <value>Do you want to mark this item as complete?</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Item_Confirm_Alert_Message_for_Incomplete_Status</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Item Confirm Alert Message for Incomplete Status</shortDescription>
+        <value>Do you want to mark this item as incomplete?</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Item_Delete_Confirm_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Item Delete Confirm Message</shortDescription>
+        <value>Are You Sure?</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Item_Delete_Error_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Item Delete Error Message</shortDescription>
+        <value>Something went wrong! Checklist Item was not deleted</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Item_Delete_Success_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Item Delete Success Message</shortDescription>
+        <value>Checklist Item deleted Successfully</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Item_Success_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Item Success Message</shortDescription>
+        <value>Checklist Item Created Successfully</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Item_Update_Error_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Item Update Error Message</shortDescription>
+        <value>Something went wrong! Checklist Item was not updated</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Item_Update_Success_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Item Update Success Message</shortDescription>
+        <value>Checklist Item Updated Successfully</value>
+    </labels>
+    <labels>
+        <fullName>Checklist_Success_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Checklist Success Message</shortDescription>
+        <value>Checklist Created/Updated Successfully</value>
+    </labels>
+    <labels>
+        <fullName>New_Line</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New Line</shortDescription>
+        <value>&lt;br/&gt;</value>
+    </labels>
+    <labels>
+        <fullName>No_ChecklistItems_Present</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No ChecklistItems Present</shortDescription>
+        <value>No checklist items..</value>
+    </labels>
+    <labels>
+        <fullName>Required_Field_Error</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Required Field Error</shortDescription>
+        <value>Please fill all the required fields.</value>
+    </labels>
+</CustomLabels>

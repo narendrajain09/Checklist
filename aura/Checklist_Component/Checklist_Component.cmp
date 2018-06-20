@@ -1,0 +1,136 @@
+<aura:component controller = "ChecklistController" implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" access="global">
+    
+    <!--ATTRIBUTES-->
+    <aura:attribute name="header" type="String" default="Checklist App" access="global" />
+    <aura:attribute name="hasChecklist" type="Boolean" default="true"/>
+    <aura:attribute name="Checklist" type="Object"/>
+    <aura:attribute name="ChecklistItems" type="Object[]" default="[]"/>
+    <aura:attribute name="ChecklistItemCount" type="Integer" default="0"/>
+    <aura:attribute name="ShowSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="ConfirmMessage" type="Boolean"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="hasRequiredError" type="Boolean" default="false"/>
+    <aura:attribute name="ErrorMessage" type="String" default="Something went wrong!"/>
+    
+    <!--HANDLERS-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.ShowSpinner}" action="{!c.controlSpinner}"/>
+    <aura:handler name="RefreshEvent" event="c:ChecklistRefreshEvent" action="{!c.doInit}"/>
+    
+    <!--FORCE:RECORDDATA VARS-->
+    <aura:attribute name="newItem" type="Object"/>
+    <aura:attribute name="newItemFields" type="Object"/>
+    <force:recordData aura:id="itemRecordCreator" 
+                      layoutType="FULL"
+                      targetRecord="{!v.newItem}"
+                      targetFields="{!v.newItemFields}"
+                      targetError="{!v.ErrorMessage}" />
+    
+    <div class="slds-col modal-header slds-modal__header">
+        <h2 class="title slds-text-heading--medium">{!v.header}</h2>
+    </div>
+ <aura:if isTrue="{!v.hasError}">
+        <ui:message title="Error" severity="error" closable="true">
+            {!v.ErrorMessage}
+        </ui:message>
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.hasChecklist}" >
+                <lightning:card footer="" title="{!v.Checklist.Name + ' ('+ v.Checklist.Type__c + ')'}" iconName="utility:list">
+                    <aura:set attribute="actions">
+                        <lightning:button label="Delete Checklist" variant="destructive" iconName="utility:delete" onclick="{!c.delete}"/>
+                        <lightning:button label="add item" variant="brand" iconName="utility:add" onclick="{!c.newItem}"/>
+                    </aura:set>
+                    <aura:if isTrue="{!v.ChecklistItemCount == 0}">
+                        <ui:message title="" severity="info" closable="false">
+                            <lightning:icon iconName="utility:info" size="small" alternativeText="Close" />
+                            &nbsp;
+                            {!$Label.c.No_ChecklistItems_Present}
+                        </ui:message>
+                        <aura:set attribute="else">
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Item Description">Item Description</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Completed">Completed</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Action"></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.ChecklistItems}" var="item">
+                                        <c:ChecklistItem ChecklistItem="{!item}" ShowSpinner="{!v.ShowSpinner}"/>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </aura:set>
+                    </aura:if>
+                </lightning:card>
+                <aura:set attribute="else">
+                	<aura:unescapedHtml value="{!$Label.c.New_Line}" />
+                   <center><h4 class="title slds-text-heading--medium">Create Checklist</h4></center>
+                    <c:CreateChecklist/>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+    <lightning:spinner aura:id="spinner" alternativeText="Loading" size="large"/>
+    
+    <div aura:id="add-item-modal" class="slds-hide">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.cancel}">
+                        <lightning:icon iconName="utility:close" alternativeText="Close" />
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        <lightning:icon iconName="utility:new" size="small" alternativeText="Close" />
+                        New checklist item
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                <aura:if isTrue="{!v.hasRequiredError}">
+           			<ui:message title="Error" severity="error" closable="false" >
+     				{!$Label.c.Required_Field_Error}
+  					</ui:message>    
+           </aura:if>  
+                
+                    <lightning:input label="Description" value="{!v.newItemFields.Description__c}" required="true" messageWhenValueMissing = "Description  Missing"/>
+                    <ui:inputCheckbox label="Completed" value="{!v.newItemFields.Completed__c}" />
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.createItem}">Confirm</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    <div aura:id="confirm" class="slds-hide">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.cancel}">
+                        <lightning:icon iconName="utility:close" alternativeText="Close" />
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        <lightning:icon iconName="utility:warning" size="small" alternativeText="Close" />
+                        Confirmation!
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <ui:outputText class="slds-align--absolute-center" value="{!v.ConfirmMessage}"></ui:outputText>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.confirm}">Confirm</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+</aura:component>
